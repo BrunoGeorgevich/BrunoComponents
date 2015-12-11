@@ -8,6 +8,7 @@ Item {
     property var normalColor : "#2196F3"
     property alias textColor : textEdit.color
     property alias placeholder : label.text
+    property alias text : textEdit.text
     property var edited : false
     function getText() { return textEdit.text }
     function getTextLength() { return textEdit.text.length }
