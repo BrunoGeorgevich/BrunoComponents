@@ -1,136 +1,103 @@
-import QtQuick 2.0
+import QtQuick 2.5
+import QtQuick.Window 2.0
 
 Item {
     id:notificationRoot
-
-    property string notificationColor : "Black"
-    property bool onTheTop : false
-    property int timeInterval: 2000
-
-    function notify(msg) {
-        notificationRect.state = "show"
-        notificationTxt.text = msg
-        timer.restart()
-    }
-
+    property var notificationColor : "#333"
+    property bool isOnTheTop : false
+    property bool centralized : false
+    property var defaultH: parent.height/10
+    property var defaultW: parent.width/2
+    property alias timeInterval: timer.interval
+    function show() { notificationRoot.state = isOnTheTop?"showT":"showB" }
+    function hide() { notificationRoot.state = isOnTheTop?"hideT":"hideB" }
+    function notify(msg) { coloredNotify(msg,"#333") }
     function coloredNotify(msg, color) {
-        notificationRect.state = "show"
-        notificationTxt.text = msg
+        show(); timer.restart()
         notificationColor = color
+        notificationLabel.text = msg
         notificationRect.color = notificationColor
-        timer.restart()
     }
-
-    onOnTheTopChanged: notificationRect.y = (onTheTop)?-height:notificationRoot.height
-
-    anchors.fill: parent
+    state:isOnTheTop?"hideT":"hideB"
+    height:defaultH; width:defaultW
+    anchors{
+        margins:parent.height/50
+        right:centralized?undefined:parent.right
+        horizontalCenter: centralized?parent.horizontalCenter:undefined
+    }
 
     Timer {
         id:timer
-
-        onTriggered: {
-            notificationRect.state = "hide"
-        }
-
-        interval: timeInterval
-        repeat: false
+        interval: 2000; repeat: false
+        onTriggered: notificationRoot.hide()
     }
-
     Rectangle {
         id:notificationRect
-
-        function show() {
-            if(onTheTop) { y = notificationRoot.height*(0.08) }
-            else { y = notificationRoot.height*(0.92) - height }
-        }
-
-        function hide() {
-            if(onTheTop) { y = -height }
-            else { y = notificationRoot.height }
-        }
-
-        scale:0
-        width:parent.width*(0.4)
-        height:parent.height*(0.05)
-
-        y:(onTheTop)?-height:notificationRoot.height;
-
-        anchors {
-            horizontalCenter: parent.horizontalCenter
-        }
-
-        radius: height/6
-        color: notificationColor
-
-        Behavior on color {
-            ColorAnimation {
-                duration: 100
-            }
-        }
-
-        Behavior on y {
-            id:behaviorOnY
-            NumberAnimation {
-                duration: 700
-                easing.type:Easing.InOutQuad
-            }
-        }
-
-        states: [
-            State { name: "show" },
-            State { name: "hide" }
-        ]
-
-        transitions: [
-            Transition {
-                to: "show"
-                ScriptAction { script:notificationRect.show() }
-                PropertyAnimation { target:notificationRect; property: "scale"; from:0; to:1; duration:400 }
-            },
-            Transition {
-                to: "hide"
-                ScriptAction { script:notificationRect.hide() }
-                PropertyAnimation { target:notificationRect; property: "scale"; from:1; to:0; duration:400 }
-            }
-        ]
-
-        Text {
-            id:notificationTxt
-
-            function fontSize() {
-                if(text.length <= 10)
-                    return height*0.7
-                else if(text.length <= 20)
-                    return height*0.5
-                else
-                    return height*0.4
-            }
-
-            onTextChanged: {
-                notificationTxt.text = text.substring(0,50);
-            }
-
-            anchors.fill: parent
-
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
-
-            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-            clip: true
-
-            font.pixelSize: fontSize()
-            color:"White"
-        }
-
+        anchors.fill:parent
+        radius: height/6; color: notificationColor
         MouseArea {
-            anchors.fill: parent
-            hoverEnabled: true
-
-            onEntered: { notificationRect.color = Qt.lighter(notificationColor) ; timer.stop() }
+            anchors.fill: parent; hoverEnabled: true
+            onEntered: { notificationRect.color = Qt.lighter(notificationColor,1.2) ; timer.stop() }
             onExited: { notificationRect.color = notificationColor ; timer.start() }
-
-            onClicked: { timer.stop(); notificationRect.state = "hide" }
+            onClicked: { timer.stop(); notificationRoot.state = isOnTheTop?"hideT":"hideB" }
         }
     }
-}
+    Text {
+        id:notificationLabel
+        anchors.centerIn: parent
+        height:parent.height*0.8; width:parent.width*0.9
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+        font.pixelSize: height*0.5; fontSizeMode: Text.Fit
+        text:"Oi"; color:Qt.lighter(notificationColor,3.5)
+        onTextChanged:  {
+            notificationRoot.height=defaultH
+            notificationRoot.width=defaultW
+            while(notificationRoot.height < notificationLabel.contentHeight) {
+                notificationRoot.height *= 1.2
+            }
+        }
+    }
 
+    states: [
+        State {
+            name: "showT";
+            AnchorChanges {
+                target:notificationRoot
+                anchors.top:parent.top
+                anchors.bottom:undefined
+            }
+        },
+        State {
+            name: "hideT";
+            AnchorChanges {
+                target:notificationRoot
+                anchors.bottom:parent.top
+                anchors.top:undefined
+            }
+        },
+        State {
+            name: "showB";
+            AnchorChanges {
+                target:notificationRoot
+                anchors.top:undefined
+                anchors.bottom:parent.bottom
+            }
+        },
+        State {
+            name: "hideB";
+            AnchorChanges {
+                target:notificationRoot
+                anchors.bottom:undefined
+                anchors.top:parent.bottom
+            }
+        }
+    ]
+    transitions: [
+        Transition { from:"hideT"; to: "showT"; AnchorAnimation { duration:400; easing.type: "OutBack"  } },
+        Transition { from:"showT"; to: "hideT"; AnchorAnimation { duration:400; easing.type: "InBack" } },
+        Transition { from:"hideB"; to: "showB"; AnchorAnimation { duration:400; easing.type: "OutBack"  } },
+        Transition { from:"showB"; to: "hideB"; AnchorAnimation { duration:400; easing.type: "InBack" } }
+    ]
+}
