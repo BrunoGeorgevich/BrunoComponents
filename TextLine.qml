@@ -22,10 +22,10 @@ Item {
             anchors { fill: parent; topMargin: parent.height*0.9 }
             Behavior on color { ColorAnimation { duration:200 } }
         }
-        TextEdit {
+        TextInput {
             id:textEdit
             anchors.fill: parent
-            color: "#555"
+            color: "#555"; clip:true
             font { pixelSize: parent.height*0.6; family:"Helvetica" }
             verticalAlignment: TextEdit.AlignVCenter
             onFocusChanged: edited=true
