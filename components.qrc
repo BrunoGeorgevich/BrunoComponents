@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/components">
+        <file>Button.qml</file>
+        <file>ImageButton.qml</file>
+        <file>NotificationSystem.qml</file>
+        <file>PopUpWindow.qml</file>
+        <file>Sidebar.qml</file>
+        <file>TextLine.qml</file>
+    </qresource>
+</RCC>

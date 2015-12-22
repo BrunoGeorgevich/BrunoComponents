@@ -10,6 +10,7 @@ Item {
     property alias placeholder : label.text
     property alias text : textEdit.text
     property var edited : false
+    property var password : false
     function getText() { return textEdit.text }
     function getTextLength() { return textEdit.text.length }
     function isEmpty() { return textEdit.text.length == 0 ? true:false }
@@ -26,6 +27,7 @@ Item {
             id:textEdit
             anchors.fill: parent
             color: "#555"; clip:true
+            echoMode: password ? TextInput.Password : TextInput.Normal
             font { pixelSize: parent.height*0.6; family:"Helvetica" }
             verticalAlignment: TextEdit.AlignVCenter
             onFocusChanged: edited=true
