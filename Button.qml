@@ -12,6 +12,7 @@ Item {
     property real zoom : 1.1
     property bool responsive : false
     property int elevation : 3
+    property bool wave : false
     height:parent.height/10; width:parent.width/8
     DropShadow {
         id:shadow
@@ -26,18 +27,46 @@ Item {
         scale: mouseArea.containsMouse ? zoom : 1
         Behavior on scale { NumberAnimation { duration: 100 } }
     }
-
     Rectangle {
         id:button
-        anchors.fill: parent
+        anchors.fill: parent; clip:true
         scale: mouseArea.containsMouse ? zoom : 1
         Behavior on scale { NumberAnimation { duration: 100 } }
+        Item {
+            anchors.fill: parent; clip:true
+            Rectangle {
+                id:effect
+                width:parent.width*2; height: width; radius:width/2; scale:0
+                color:Qt.lighter(button.color,2.2)
+            }
+        }
+        SequentialAnimation {
+            id: waveEffect
+            running: false; loops: 1
+            ParallelAnimation {
+                NumberAnimation { target:effect; property:"scale"; to:1; duration:400 }
+                NumberAnimation { target:effect; property:"opacity"; to:0; duration:400 }
+            }
+            ScriptAction {
+                script: {
+                    effect.scale=0;effect.opacity=1
+                }
+            }
+        }
         Text {
             id:text; text:"Button"
             anchors.centerIn: parent
             color:"#333"; font { family:"Helvetica"; pixelSize: button.height/4 }
         }
-        MouseArea { id:mouseArea; anchors.fill: parent; hoverEnabled: responsive }
+        MouseArea {
+            id:mouseArea; anchors.fill: parent; hoverEnabled: responsive
+            onClicked: {
+                if(wave) {
+                    effect.x = mouse.x - effect.width/2; effect.y = mouse.y - effect.height/2
+                    waveEffect.start()
+                }
+            }
+        }
     }
 }
 

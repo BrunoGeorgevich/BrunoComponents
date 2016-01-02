@@ -6,5 +6,6 @@
         <file>PopUpWindow.qml</file>
         <file>Sidebar.qml</file>
         <file>TextLine.qml</file>
+        <file>Card.qml</file>
     </qresource>
 </RCC>
