@@ -7,5 +7,7 @@
         <file>Sidebar.qml</file>
         <file>TextLine.qml</file>
         <file>Card.qml</file>
+        <file>Frame.qml</file>
+        <file>functions.js</file>
     </qresource>
 </RCC>
