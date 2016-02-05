@@ -3,15 +3,15 @@ import QtGraphicalEffects 1.0
 
 Item {
     id:root
-    property bool isOpened : false
+    property var opened : false
     property alias sideBarColor: sideBar.color
     property alias sideBarWidth: sideBar.width
     property alias sideBarHeight: sideBar.height
     property alias sideBarContent: sideBar.children
-    function close() { root.state = "hide" }
-    function open() { root.state = "show" }
+    function close() { opened = false }
+    function open() { opened = true }
     height:parent.height; width:parent.width
-    state: "hide"
+    state: root.opened ? "show":"hide"
 
     Rectangle {
         id:backRect
@@ -50,7 +50,7 @@ Item {
             }
             PropertyChanges {
                 target: root
-                isOpened : false
+                opened : false
             }
         },
         State {
@@ -61,7 +61,7 @@ Item {
             }
             PropertyChanges {
                 target: root
-                isOpened : true
+                opened : true
             }
         }
     ]

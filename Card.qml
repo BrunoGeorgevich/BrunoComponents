@@ -4,6 +4,7 @@ import QtGraphicalEffects 1.0
 Item {
     property alias content : card.children
     property alias color : card.color
+    property alias card : card
     height:parent.height/3; width: parent.width/3
     DropShadow {
         id:shadow
@@ -19,6 +20,7 @@ Item {
     Rectangle {
         id:card
         anchors.fill: parent
+        radius: this.width*0.01
     }
 }
 

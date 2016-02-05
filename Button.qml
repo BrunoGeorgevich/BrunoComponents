@@ -5,6 +5,7 @@ Item {
     property alias radius: button.radius
     property alias color: button.color
     property alias bold: text.font.bold
+    property alias font: text.font
     property alias pixelSize: text.font.pixelSize
     property alias text: text.text
     property alias textColor: text.color
