@@ -6,13 +6,16 @@ import QtGraphicalEffects 1.0
 Item {
     property var selectColor : "#009688"
     property var normalColor : "#2196F3"
+    property var errorColor : "#F32121"
     property alias textColor : textEdit.color
     property alias placeholder : label.text
     property alias text : textEdit.text
     property var edited : false
     property var password : false
+    signal verification()
     function getText() { return textEdit.text }
     function getTextLength() { return textEdit.text.length }
+    function error() { normalColor = errorColor }
     function isEmpty() { return textEdit.text.length == 0 ? true:false }
     Item {
         id:rect
@@ -30,7 +33,10 @@ Item {
             echoMode: password ? TextInput.Password : TextInput.Normal
             font { pixelSize: parent.height*0.6; family:"Helvetica" }
             verticalAlignment: TextEdit.AlignVCenter
-            onFocusChanged: edited=true
+            onFocusChanged: {
+                verification()
+                edited=true
+            }
         }
     }
     Text {
