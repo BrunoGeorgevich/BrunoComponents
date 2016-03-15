@@ -5,13 +5,16 @@ Item {
     property alias content : card.children
     property alias color : card.color
     property alias card : card
+    property var elevation : 2
+    property alias shadowRadius : shadow.radius
+
     height:parent.height/3; width: parent.width/3
     DropShadow {
         id:shadow
         anchors.fill: card
-        horizontalOffset: parent.height/80
-        verticalOffset: parent.height/60
-        radius: parent.height/30
+        horizontalOffset: elevation
+        verticalOffset: elevation
+        radius: 5
         samples: 32
         color: "#80000000"
         source: card
