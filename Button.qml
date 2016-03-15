@@ -12,6 +12,7 @@ Item {
     property alias action : mouseArea
     property real zoom : 1.1
     property bool responsive : false
+    property bool allCaps : true
     property int elevation : 3
     property bool wave : false
     height:parent.height/10; width:parent.width/8
@@ -57,7 +58,12 @@ Item {
         Text {
             id:text; text:"Button"
             anchors.centerIn: parent
-            color:"#333"; font { family:"Helvetica"; pixelSize: button.height/4 }
+            color:"#535353";
+            font {
+                weight: Font.Medium;
+                pixelSize: button.height/4;
+                capitalization: allCaps ? Font.AllUppercase : Font.Capitalize;
+            }
         }
         MouseArea {
             id:mouseArea; anchors.fill: parent; hoverEnabled: responsive
