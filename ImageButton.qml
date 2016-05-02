@@ -10,6 +10,8 @@ Item {
     property real zoom : 1.1
     property bool responsive : false
     property int elevation : 3
+    property alias colorize: colorOverlay.visible
+    property alias imageColor: colorOverlay.color
     height:parent.height/10; width:parent.width/8
     DropShadow {
         id:shadow
@@ -35,6 +37,13 @@ Item {
             height:parent.height*0.7; width: parent.width*0.7
             anchors.centerIn: parent;
             sourceSize.height: parent.height; sourceSize.width: parent.width
+        }
+        ColorOverlay {
+            id:colorOverlay
+            visible: false
+            anchors.fill: image
+            source: image
+            color: "#3b3b3b"
         }
         MouseArea { id:mouseArea; anchors.fill: parent; hoverEnabled: responsive }
     }
