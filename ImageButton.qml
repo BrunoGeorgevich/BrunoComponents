@@ -12,7 +12,16 @@ Item {
     property int elevation : 3
     property alias colorize: colorOverlay.visible
     property alias imageColor: colorOverlay.color
+    property bool lotOfClicks : false
     height:parent.height/10; width:parent.width/8
+    Timer {
+        id: timer
+        interval: lotOfClicks?0:400
+        running: false
+        repeat: false
+        triggeredOnStart: false
+        onTriggered: mouseArea.visible = true
+    }
     DropShadow {
         id:shadow
         anchors.fill: button
@@ -45,7 +54,13 @@ Item {
             source: image
             color: "#3b3b3b"
         }
-        MouseArea { id:mouseArea; anchors.fill: parent; hoverEnabled: responsive }
+        MouseArea {
+            id:mouseArea; anchors.fill: parent; hoverEnabled: responsive
+            onClicked: {
+                mouseArea.visible = false
+                timer.start()
+            }
+        }
     }
 }
 

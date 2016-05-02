@@ -15,7 +15,17 @@ Item {
     property bool allCaps : true
     property int elevation : 3
     property bool wave : false
+    property bool lotOfClicks : false
     height:parent.height/10; width:parent.width/8
+    Timer {
+        id: timer        
+        interval: lotOfClicks?0:400
+        running: false
+        repeat: false
+        triggeredOnStart: false
+        onTriggered: mouseArea.visible = true
+    }
+
     DropShadow {
         id:shadow
         anchors.fill: button
@@ -72,6 +82,8 @@ Item {
                     effect.x = mouse.x - effect.width/2; effect.y = mouse.y - effect.height/2
                     waveEffect.start()
                 }
+                mouseArea.visible = false
+                timer.start()
             }
         }
     }
