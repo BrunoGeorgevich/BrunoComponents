@@ -16,10 +16,11 @@ Item {
     property int elevation : 3
     property bool wave : false
     property bool lotOfClicks : false
+    property int coolDownTime : 400
     height:parent.height/10; width:parent.width/8
     Timer {
-        id: timer        
-        interval: lotOfClicks?0:400
+        id: timer
+        interval: lotOfClicks?0:coolDownTime
         running: false
         repeat: false
         triggeredOnStart: false

@@ -1,5 +1,5 @@
 import QtQuick 2.5
-import QtQuick.Controls 1.4
+import Qt.labs.controls 1.0
 
 import "functions.js" as JS
 
@@ -14,6 +14,10 @@ Item {
     property alias bottomBarColor : _bottomBar.color
     property alias topBarContent : _topBar.children
     property alias bottomBarContent : _bottomBar.children
+    property alias stackPushEnter : _stackPages.pushEnter
+    property alias stackPushExit : _stackPages.pushExit
+    property alias stackPopEnter : _stackPages.popEnter
+    property alias stackPopExit : _stackPages.popExit
     anchors.fill: parent
     Rectangle {
         id:_topBar
@@ -27,6 +31,38 @@ Item {
         anchors {
             left:parent.left; right: parent.right;
             top: _topBar.bottom; bottom: _bottomBar.top
+        }
+        pushEnter: Transition {
+            PropertyAnimation {
+                property: "x"
+                from: width
+                to:0
+                duration: 100
+            }
+        }
+        pushExit: Transition {
+            PropertyAnimation {
+                property: "x"
+                from: 0
+                to:-width
+                duration: 100
+            }
+        }
+        popEnter: Transition {
+            PropertyAnimation {
+                property: "x"
+                from: -width
+                to:0
+                duration: 100
+            }
+        }
+        popExit: Transition {
+            PropertyAnimation {
+                property: "x"
+                from: 0
+                to:width
+                duration: 100
+            }
         }
     }
     Rectangle {

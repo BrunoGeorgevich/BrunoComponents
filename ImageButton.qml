@@ -13,10 +13,11 @@ Item {
     property alias colorize: colorOverlay.visible
     property alias imageColor: colorOverlay.color
     property bool lotOfClicks : false
+    property int coolDownTime : 400
     height:parent.height/10; width:parent.width/8
     Timer {
         id: timer
-        interval: lotOfClicks?0:400
+        interval: lotOfClicks?0:coolDownTime
         running: false
         repeat: false
         triggeredOnStart: false
