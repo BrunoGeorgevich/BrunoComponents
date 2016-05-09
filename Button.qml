@@ -17,6 +17,8 @@ Item {
     property bool wave : false
     property bool lotOfClicks : false
     property int coolDownTime : 400
+    property real borderWidth : 0
+    property string borderColor : "#000"
     height:parent.height/10; width:parent.width/8
     Timer {
         id: timer
@@ -42,6 +44,7 @@ Item {
     }
     Rectangle {
         id:button
+        border { width: borderWidth; color: borderColor }
         anchors.fill: parent; clip:true
         scale: mouseArea.containsMouse ? zoom : 1
         Behavior on scale { NumberAnimation { duration: 100 } }
